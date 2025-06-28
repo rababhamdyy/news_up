@@ -8,11 +8,16 @@ class NewsService {
 
   NewsService(Dio dio);
 
-  Future<List<ArticleModel>> getNews() async {
+  Future<List<ArticleModel>> getNews({String? category}) async {
     try {
-      final response = await _dio.get(
-        '$_baseUrl/v2/top-headlines?country=us&apiKey=$_apikey',
-      );
+      String url = '$_baseUrl/v2/top-headlines?country=us&apiKey=$_apikey';
+
+      // Add category parameter if provided
+      if (category != null && category.toLowerCase() != 'general') {
+        url += '&category=${category.toLowerCase()}';
+      }
+
+      final response = await _dio.get(url);
 
       Map<String, dynamic> jsonData = response.data;
 
@@ -43,5 +48,9 @@ class NewsService {
     } catch (e) {
       return [];
     }
+  }
+
+  Future<List<ArticleModel>> getNewsByCategory(String category) async {
+    return getNews(category: category);
   }
 }

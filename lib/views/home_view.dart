@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:news_up/views/horizontal_view.dart';
 import 'package:news_up/widgets/vertical_list_view_builder.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  String selectedCategory = 'General';
+
+  void onCategorySelected(String category) {
+    setState(() {
+      selectedCategory = category;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +36,18 @@ class HomeView extends StatelessWidget {
           ],
         ),
       ),
-      body: const CustomScrollView(
+      body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child: HorizontalListView()),
-          SliverToBoxAdapter(child: SizedBox(height: 30)),
+          SliverToBoxAdapter(
+            child: HorizontalListView(
+              selectedCategory: selectedCategory,
+              onCategorySelected: onCategorySelected,
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 30)),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            sliver: VerticalListViewBuilder(),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: VerticalListViewBuilder(selectedCategory: selectedCategory),
           ),
         ],
       ),

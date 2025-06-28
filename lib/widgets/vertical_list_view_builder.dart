@@ -5,21 +5,34 @@ import 'package:news_up/services/news_service.dart';
 import 'package:news_up/views/vertical_view.dart';
 
 class VerticalListViewBuilder extends StatefulWidget {
-  const VerticalListViewBuilder({super.key});
+  final String selectedCategory;
+
+  const VerticalListViewBuilder({super.key, required this.selectedCategory});
 
   @override
-  State<VerticalListViewBuilder> createState() => _VerticalListViewBuilderState();
+  State<VerticalListViewBuilder> createState() =>
+      _VerticalListViewBuilderState();
 }
 
 class _VerticalListViewBuilderState extends State<VerticalListViewBuilder> {
-
-  var future ;
+  var future;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    future = NewsService(Dio()).getNews();
+    _loadNews();
+  }
+
+  @override
+  void didUpdateWidget(VerticalListViewBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedCategory != widget.selectedCategory) {
+      _loadNews();
+    }
+  }
+
+  void _loadNews() {
+    future = NewsService(Dio()).getNews(category: widget.selectedCategory);
   }
 
   @override

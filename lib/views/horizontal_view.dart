@@ -3,7 +3,14 @@ import 'package:news_up/models/horizontal_model.dart';
 import 'package:news_up/widgets/horizontal_card_widget.dart';
 
 class HorizontalListView extends StatelessWidget {
-  const HorizontalListView({super.key});
+  final String selectedCategory;
+  final Function(String) onCategorySelected;
+
+  const HorizontalListView({
+    super.key,
+    required this.selectedCategory,
+    required this.onCategorySelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +22,8 @@ class HorizontalListView extends StatelessWidget {
         itemBuilder: (context, cardIndex) {
           return HorizontalCardWidget(
             imageCard: imageCards[cardIndex],
+            isSelected: imageCards[cardIndex].title == selectedCategory,
+            onTap: () => onCategorySelected(imageCards[cardIndex].title),
           );
         },
       ),
