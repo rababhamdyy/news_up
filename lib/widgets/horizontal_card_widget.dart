@@ -2,31 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:news_up/models/horizontal_model.dart';
 
 class HorizontalCardWidget extends StatelessWidget {
-  const HorizontalCardWidget({super.key, required this.imageCard});
-
   final HorizontalModel imageCard;
+  final bool isFirst;
+  const HorizontalCardWidget({
+    super.key,
+    required this.imageCard,
+    this.isFirst = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: Container(
-        height: 120,
-        width: 200,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage(imageCard.image),
+    return Container(
+      height: 120,
+      width: 180,
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(imageCard.image, fit: BoxFit.cover),
           ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Center(
-          child: Text(
-            imageCard.title,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.black.withValues(alpha: 0.3),
+            ),
           ),
-        ),
+          Center(
+            child: Text(
+              imageCard.title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

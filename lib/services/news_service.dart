@@ -16,23 +16,15 @@ class NewsService {
 
       Map<String, dynamic> jsonData = response.data;
 
-      // Check if the response has the expected structure
-      if (jsonData['status'] != 'ok') {
-        print('API Error: ${jsonData['message'] ?? 'Unknown error'}');
-        return [];
-      }
-
       List<dynamic> articles = jsonData['articles'] ?? [];
       List<ArticleModel> articlesList = [];
 
       for (var article in articles) {
         try {
-          // Validate required fields
           String title = article['title'] ?? 'No Title Available';
           String? image = article['urlToImage'];
           String? description = article['description'];
 
-          // Only add articles that have at least a title
           if (title.isNotEmpty && title != 'null') {
             ArticleModel articleModel = ArticleModel(
               image: image,
@@ -43,14 +35,12 @@ class NewsService {
             articlesList.add(articleModel);
           }
         } catch (e) {
-          print('Error parsing article: $e');
           continue;
         }
       }
 
       return articlesList;
     } catch (e) {
-      print('Error fetching news: $e');
       return [];
     }
   }

@@ -3,9 +3,7 @@ import 'package:news_up/models/horizontal_model.dart';
 import 'package:news_up/widgets/horizontal_card_widget.dart';
 
 class HorizontalListView extends StatelessWidget {
-  const HorizontalListView({
-    super.key,
-  });
+  const HorizontalListView({super.key});
 
   @override
   Widget build(BuildContext context) {

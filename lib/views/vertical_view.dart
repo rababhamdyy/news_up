@@ -8,16 +8,14 @@ class VerticalListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        childCount: articles.length,
-        (context, cardIndex) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: VerticalCardWidget(articleModel: articles[cardIndex]),
-          );
-        },
-      ),
+    return SliverList.builder(
+      itemCount: articles.length,
+      itemBuilder: (context, cardIndex) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: VerticalCardWidget(articleModel: articles[cardIndex]),
+        );
+      },
     );
   }
 }

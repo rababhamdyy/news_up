@@ -5,12 +5,14 @@ class HorizontalModel {
 }
 
 final List<HorizontalModel> imageCards = [
-  const HorizontalModel(title: 'business', image: 'assets/business.avif'),
-  const HorizontalModel(title: 'technology', image: 'assets/technology.jpeg'),
-  const HorizontalModel(title: 'science', image: 'assets/science.avif'),
+  const HorizontalModel(title: 'Business', image: 'assets/business.jpeg'),
+  const HorizontalModel(title: 'Technology', image: 'assets/technology.jpeg'),
+  const HorizontalModel(title: 'Science', image: 'assets/science.avif'),
   const HorizontalModel(
-      title: 'entertaiment', image: 'assets/entertaiment.avif'),
-  const HorizontalModel(title: 'general', image: 'assets/general.avif'),
-  const HorizontalModel(title: 'health', image: 'assets/health.avif'),
-  const HorizontalModel(title: 'sports', image: 'assets/sports.avif'),
+    title: 'Entertaiment',
+    image: 'assets/entertaiment.avif',
+  ),
+  const HorizontalModel(title: 'General', image: 'assets/general.avif'),
+  const HorizontalModel(title: 'Health', image: 'assets/health.avif'),
+  const HorizontalModel(title: 'Sports', image: 'assets/sports.avif'),
 ];
