@@ -8,88 +8,42 @@ class VerticalListViewBuilder extends StatefulWidget {
   const VerticalListViewBuilder({super.key});
 
   @override
-  State<VerticalListViewBuilder> createState() =>
-      _VerticalListViewBuilderState();
+  State<VerticalListViewBuilder> createState() => _VerticalListViewBuilderState();
 }
 
 class _VerticalListViewBuilderState extends State<VerticalListViewBuilder> {
-  List<ArticleModel> articles = [];
-  bool isLoading = true;
-  String? errorMessage;
+
+  var future ;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    getGeneralNews();
-  }
-
-  Future<void> getGeneralNews() async {
-    try {
-      setState(() {
-        isLoading = true;
-        errorMessage = null;
-      });
-
-      articles = await NewsService(Dio()).getNews();
-
-      setState(() {
-        isLoading = false;
-        if (articles.isEmpty) {
-          errorMessage = 'No articles found. Please try again.';
-        }
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        errorMessage = 'Error loading news: $e';
-      });
-    }
+    future = NewsService(Dio()).getNews();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return const SliverToBoxAdapter(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-    }
-
-    if (errorMessage != null) {
-      return SliverToBoxAdapter(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Text(errorMessage!),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: getGeneralNews,
-                  child: const Text('Retry'),
-                ),
-              ],
+    return FutureBuilder<List<ArticleModel>>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return VerticalListView(articles: snapshot.data!);
+        } else if (snapshot.hasError) {
+          return const SliverToBoxAdapter(
+            child: Center(
+              child: Text(
+                "oops there was an error, try later",
+                style: TextStyle(color: Colors.red),
+              ),
             ),
-          ),
-        ),
-      );
-    }
-
-    if (articles.isEmpty) {
-      return const SliverToBoxAdapter(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text('No articles available'),
-          ),
-        ),
-      );
-    }
-
-    return VerticalListView(articles: articles);
+          );
+        } else {
+          return const SliverToBoxAdapter(
+            child: Center(child: CircularProgressIndicator(color: Colors.red)),
+          );
+        }
+      },
+    );
   }
 }
