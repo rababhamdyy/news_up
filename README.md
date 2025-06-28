@@ -3,7 +3,7 @@
 A modern Flutter news application that provides real-time news updates from various categories using the NewsAPI. NewsUP offers a clean, intuitive interface for browsing the latest news articles with category-based filtering.
 
 <div align="center">
-  <img src="assets/NewsUP_logo.png" alt="NewsUP Logo" width="300">
+  <img src="assets/NewsUP_logo.png" alt="NewsUP Logo" >
 </div>
 
 ## ✨ Features
@@ -67,5 +67,5 @@ The app integrates with [NewsAPI](https://newsapi.org/) to fetch real-time news 
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="assets/screenshot.png" alt="NewsUP App Screenshot" width="400">
+  <img src="assets/screenshot.png" alt="NewsUP App Screenshot" >
 </div>
