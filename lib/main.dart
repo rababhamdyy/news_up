@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_up/views/home_view.dart';
 import 'package:news_up/views/splash_view.dart';
 
 void main() {
@@ -9,7 +8,6 @@ void main() {
 class NewsApp extends StatelessWidget {
   const NewsApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
