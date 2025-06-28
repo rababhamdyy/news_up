@@ -30,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Text('News', style: TextStyle(fontWeight: FontWeight.w700)),
             Text(
-              'UP',
+              ' UP',
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
             ),
           ],
@@ -44,7 +44,7 @@ class _HomeViewState extends State<HomeView> {
               onCategorySelected: onCategorySelected,
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 30)),
+          const SliverToBoxAdapter(child: SizedBox(height: 10)),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: VerticalListViewBuilder(selectedCategory: selectedCategory),

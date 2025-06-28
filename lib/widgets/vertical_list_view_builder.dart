@@ -7,15 +7,17 @@ import 'package:news_up/views/vertical_view.dart';
 class VerticalListViewBuilder extends StatefulWidget {
   final String selectedCategory;
 
-  const VerticalListViewBuilder({super.key, required this.selectedCategory});
+  const VerticalListViewBuilder({
+    super.key,
+    required this.selectedCategory,
+  });
 
   @override
-  State<VerticalListViewBuilder> createState() =>
-      _VerticalListViewBuilderState();
+  State<VerticalListViewBuilder> createState() => _VerticalListViewBuilderState();
 }
 
 class _VerticalListViewBuilderState extends State<VerticalListViewBuilder> {
-  var future;
+  late Future<List<ArticleModel>> future;
 
   @override
   void initState() {

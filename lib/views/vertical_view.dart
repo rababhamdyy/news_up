@@ -8,14 +8,32 @@ class VerticalListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList.builder(
-      itemCount: articles.length,
-      itemBuilder: (context, cardIndex) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: VerticalCardWidget(articleModel: articles[cardIndex]),
-        );
-      },
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Latest News :',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 10),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: articles.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: VerticalCardWidget(articleModel: articles[index]),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
