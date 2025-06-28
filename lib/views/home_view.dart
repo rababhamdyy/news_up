@@ -23,15 +23,14 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: Colors.red,
         title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('News', style: TextStyle(fontWeight: FontWeight.w700)),
             Text(
               ' UP',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
             ),
           ],
         ),
