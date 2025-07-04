@@ -1,55 +1,46 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:news_up/models/article_model.dart';
-import 'package:news_up/services/news_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_up/cubits/news_cubit.dart';
+import 'package:news_up/cubits/news_state.dart';
 import 'package:news_up/views/vertical_view.dart';
 
 class VerticalListViewBuilder extends StatefulWidget {
-  final String selectedCategory;
-
-  const VerticalListViewBuilder({
-    super.key,
-    required this.selectedCategory,
-  });
+  const VerticalListViewBuilder({super.key});
 
   @override
-  State<VerticalListViewBuilder> createState() => _VerticalListViewBuilderState();
+  State<VerticalListViewBuilder> createState() =>
+      _VerticalListViewBuilderState();
 }
 
 class _VerticalListViewBuilderState extends State<VerticalListViewBuilder> {
-  late Future<List<ArticleModel>> future;
-
   @override
   void initState() {
     super.initState();
-    _loadNews();
-  }
-
-  @override
-  void didUpdateWidget(VerticalListViewBuilder oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedCategory != widget.selectedCategory) {
-      _loadNews();
-    }
-  }
-
-  void _loadNews() {
-    future = NewsService(Dio()).getNews(category: widget.selectedCategory);
+    // Load initial news when widget is created
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NewsCubit>().loadNews();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ArticleModel>>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return VerticalListView(articles: snapshot.data!);
-        } else if (snapshot.hasError) {
+    return BlocBuilder<NewsCubit, NewsState>(
+      builder: (context, state) {
+        if (state is NewsLoading) {
           return const SliverToBoxAdapter(
+            child: Center(child: CircularProgressIndicator(color: Colors.red)),
+          );
+        } else if (state is NewsLoaded) {
+          return VerticalListView(
+            articles: state.articles,
+            selectedCategoty: state.category ?? 'General',
+          );
+        } else if (state is NewsError) {
+          return SliverToBoxAdapter(
             child: Center(
               child: Text(
-                "oops there was an error, try later",
-                style: TextStyle(color: Colors.red),
+                state.message,
+                style: const TextStyle(color: Colors.red),
               ),
             ),
           );
