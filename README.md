@@ -67,5 +67,5 @@ The app integrates with [NewsAPI](https://newsapi.org/) to fetch real-time news 
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="assets/screenshot.png" alt="NewsUP App Screenshot" >
+  <img src="assets/news.jpg" alt="NewsUP App Screenshot" >
 </div>
