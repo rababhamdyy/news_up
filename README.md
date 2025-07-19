@@ -70,5 +70,6 @@ The app integrates with [NewsAPI](https://newsapi.org/) to fetch real-time news 
 
 <div align="center">
   <img src="assets/country.png" alt="Country Selection Feature" width="300">
-  <img src="assets/screenshot.png" alt="NewsUP App Screenshot" width="300">
+  <br>
+  <img src="assets/screenshot.png" alt="NewsUP App Screenshot" width="700">
 </div>
