@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_up/cubits/category_cubit.dart';
 import 'package:news_up/cubits/category_state.dart';
+import 'package:news_up/cubits/country_cubit.dart';
 import 'package:news_up/cubits/news_cubit.dart';
 import 'package:news_up/views/horizontal_view.dart';
 import 'package:news_up/widgets/vertical_list_view_builder.dart';
@@ -40,7 +41,9 @@ class HomeView extends StatelessWidget {
                   } else if (categoryState is CategoryInitial) {
                     currentCategory = categoryState.selectedCategory;
                   }
-                  context.read<NewsCubit>().loadNewsByCategory(currentCategory);
+                  final countryCubit = context.read<CountryCubit>();
+                  final country = countryCubit.isAllCountries ? null : countryCubit.currentCountry;
+                  context.read<NewsCubit>().loadNewsByCategory(currentCategory, country: country);
                 },
               );
             },
@@ -50,8 +53,11 @@ class HomeView extends StatelessWidget {
       body: BlocListener<CategoryCubit, CategoryState>(
         listener: (context, state) {
           if (state is CategorySelected) {
+            final countryCubit = context.read<CountryCubit>();
+            final country = countryCubit.isAllCountries ? null : countryCubit.currentCountry;
             context.read<NewsCubit>().loadNewsByCategory(
               state.selectedCategory,
+              country: country,
             );
           }
         },

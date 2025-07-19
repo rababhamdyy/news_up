@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_up/cubits/country_cubit.dart';
 import 'package:news_up/cubits/news_cubit.dart';
 import 'package:news_up/cubits/news_state.dart';
 import 'package:news_up/views/vertical_view.dart';
@@ -18,7 +19,9 @@ class _VerticalListViewBuilderState extends State<VerticalListViewBuilder> {
     super.initState();
     // Load initial news when widget is created
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NewsCubit>().loadNews();
+      final countryCubit = context.read<CountryCubit>();
+      final country = countryCubit.isAllCountries ? null : countryCubit.currentCountry;
+      context.read<NewsCubit>().loadNews(country: country);
     });
   }
 

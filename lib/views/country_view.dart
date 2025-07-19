@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flag/flag.dart';
+import 'package:news_up/cubits/country_cubit.dart';
+import 'package:news_up/cubits/country_state.dart';
+import 'package:news_up/cubits/news_cubit.dart';
 import 'package:news_up/views/home_view.dart';
 
 class CountryView extends StatefulWidget {
@@ -12,6 +16,7 @@ class CountryView extends StatefulWidget {
 class _CountryViewState extends State<CountryView> {
   final TextEditingController _searchController = TextEditingController();
   List<MapEntry<String, String>> _filteredCountries = [];
+  String? _selectedCountry;
 
   final Map<String, String> countries = {
     'AE': 'United Arab Emirates',
@@ -75,15 +80,26 @@ class _CountryViewState extends State<CountryView> {
     super.initState();
     _filteredCountries = countries.entries.toList();
     _searchController.addListener(_filterCountries);
+    // Initialize with current country from cubit
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final countryCubit = context.read<CountryCubit>();
+      setState(() {
+        _selectedCountry = countryCubit.isAllCountries ? 'ALL' : countryCubit.currentCountry;
+      });
+    });
   }
 
   void _filterCountries() {
     final query = _searchController.text.toLowerCase();
     setState(() {
-      _filteredCountries =
-          countries.entries
-              .where((entry) => entry.value.toLowerCase().contains(query))
-              .toList();
+      if (query.isEmpty) {
+        _filteredCountries = countries.entries.toList();
+      } else {
+        _filteredCountries =
+            countries.entries
+                .where((entry) => entry.value.toLowerCase().contains(query))
+                .toList();
+      }
     });
   }
 
@@ -95,8 +111,18 @@ class _CountryViewState extends State<CountryView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return BlocListener<CountryCubit, CountryState>(
+      listener: (context, state) {
+        if (state is CountrySelected) {
+          // Reload news with new country when country changes
+          context.read<NewsCubit>().loadNews(country: state.selectedCountry);
+        } else if (state is AllCountriesSelected) {
+          // Reload news for all countries
+          context.read<NewsCubit>().loadNews(country: null);
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
         child: Column(
           children: [
             const SizedBox(height: 20),
@@ -122,14 +148,40 @@ class _CountryViewState extends State<CountryView> {
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                itemCount: _filteredCountries.length,
+                itemCount: _filteredCountries.length + 1, // +1 for "All Countries"
                 itemBuilder: (context, index) {
-                  final countryCode = _filteredCountries[index].key;
-                  final countryName = _filteredCountries[index].value;
+                  if (index == 0) {
+                    // "All Countries" option
+                    return ListTile(
+                      leading: const Icon(Icons.public, size: 30),
+                      title: const Text('All Countries'),
+                      trailing: _selectedCountry == 'ALL'
+                          ? const Icon(Icons.check, color: Colors.green)
+                          : null,
+                      onTap: () {
+                        setState(() {
+                          _selectedCountry = 'ALL';
+                        });
+                        context.read<CountryCubit>().selectAllCountries();
+                      },
+                    );
+                  }
+                  
+                  final countryIndex = index - 1;
+                  final countryCode = _filteredCountries[countryIndex].key;
+                  final countryName = _filteredCountries[countryIndex].value;
                   return ListTile(
                     leading: _getCountryFlag(countryCode),
                     title: Text(countryName),
-                    onTap: () {},
+                    trailing: _selectedCountry == countryCode
+                        ? const Icon(Icons.check, color: Colors.green)
+                        : null,
+                    onTap: () {
+                      setState(() {
+                        _selectedCountry = countryCode;
+                      });
+                      context.read<CountryCubit>().selectCountry(countryCode);
+                    },
                   );
                 },
               ),
@@ -137,12 +189,14 @@ class _CountryViewState extends State<CountryView> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeView()),
-                  );
-                },
+                onPressed: _selectedCountry != null
+                    ? () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomeView()),
+                        );
+                      }
+                    : null,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
@@ -160,6 +214,7 @@ class _CountryViewState extends State<CountryView> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

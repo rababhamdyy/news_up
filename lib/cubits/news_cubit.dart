@@ -9,22 +9,30 @@ class NewsCubit extends Cubit<NewsState> {
     : _newsService = newsService,
       super(NewsInitial());
 
-  Future<void> loadNews({String? category}) async {
+  Future<void> loadNews({String? category, String? country}) async {
     emit(NewsLoading());
 
     try {
-      final articles = await _newsService.getNews(category: category);
+      // If country is null or empty, don't pass it to get all countries
+      final articles = await _newsService.getNews(
+        category: category,
+        country: country?.isNotEmpty == true ? country : null,
+      );
       emit(NewsLoaded(articles: articles, category: category));
     } catch (e) {
       emit(NewsError(message: 'Failed to load news: ${e.toString()}'));
     }
   }
 
-  Future<void> loadNewsByCategory(String category) async {
+  Future<void> loadNewsByCategory(String category, {String? country}) async {
     emit(NewsLoading());
 
     try {
-      final articles = await _newsService.getNewsByCategory(category);
+      // If country is null or empty, don't pass it to get all countries
+      final articles = await _newsService.getNewsByCategory(
+        category,
+        country: country?.isNotEmpty == true ? country : null,
+      );
       emit(NewsLoaded(articles: articles, category: category));
     } catch (e) {
       emit(
